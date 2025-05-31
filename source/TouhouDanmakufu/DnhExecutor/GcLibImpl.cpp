@@ -178,7 +178,7 @@ bool EApplication::_Loop() {
 	{
 		static uint32_t count = 0;
 
-		auto& [bRenderFrame, bUpdateFrame] = fpsController->Advance();
+		const auto& [bRenderFrame, bUpdateFrame] = fpsController->Advance();
 
 		if (bUpdateFrame) {
 			{

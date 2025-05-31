@@ -232,7 +232,7 @@ bool DirectGraphics::Initialize(HWND hWnd, const DirectGraphicsConfig& config) {
 				if (FAILED(hrDevice)) {
 					std::wstring err = StringUtility::Format(
 						L"Cannot create Direct3D device with HAL. [%s]\r\n  %s",
-						DXGetErrorString(hrDevice), DXGetErrorDescription(hrDevice));
+						DXGetErrorString9(hrDevice), DXGetErrorDescription9(hrDevice));
 					throw wexception(err);
 				}
 			}
@@ -241,7 +241,7 @@ bool DirectGraphics::Initialize(HWND hWnd, const DirectGraphicsConfig& config) {
 		if (FAILED(hrDevice)) {
 			//deviceStatus_ = D3DERR_NOTAVAILABLE;
 			std::wstring err = StringUtility::Format(L"Cannot create Direct3D device. [%s]\r\n  %s",
-				DXGetErrorString(hrDevice), DXGetErrorDescription(hrDevice));
+				DXGetErrorString9(hrDevice), DXGetErrorDescription9(hrDevice));
 			if (deviceType == D3DDEVTYPE_HAL)
 				err += L"\r\nRestart in reference rasterizer mode.";
 			throw wexception(err);
@@ -445,13 +445,13 @@ bool DirectGraphics::_Restore() {
 				g_restoreFailCount = 0;
 
 				std::wstring err = StringUtility::Format(L"_Restore: Failed to restore the Direct3D device; %s\r\n\t%s",
-					DXGetErrorString(deviceStatus_), DXGetErrorDescription(deviceStatus_));
+					DXGetErrorString9(deviceStatus_), DXGetErrorDescription9(deviceStatus_));
 				Logger::WriteError(err);
 				throw gstd::wexception(err);
 			}
 			else {
 				std::wstring err = StringUtility::Format(L"_Restore: Attempt failed; %s\r\n\t%s",
-					DXGetErrorString(deviceStatus_), DXGetErrorDescription(deviceStatus_));
+					DXGetErrorString9(deviceStatus_), DXGetErrorDescription9(deviceStatus_));
 				Logger::WriteWarn(err);
 			}
 		}
@@ -1198,7 +1198,7 @@ void DirectGraphicsPrimaryWindow::ChangeScreenMode(ScreenMode newMode, bool bNoR
 		previousBlendMode_ = BlendMode::RESET;
 		if (FAILED(hrReset)) {
 			std::wstring err = StringUtility::Format(L"IDirect3DDevice9::Reset: \n%s\n  %s",
-				DXGetErrorString(hrReset), DXGetErrorDescription(hrReset));
+				DXGetErrorString9(hrReset), DXGetErrorDescription9(hrReset));
 			throw gstd::wexception(err);
 		}
 

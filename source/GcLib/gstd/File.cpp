@@ -22,7 +22,7 @@ ByteBuffer::ByteBuffer(size_t size) : ByteBuffer() {
 }
 ByteBuffer::ByteBuffer(std::stringstream& src) : ByteBuffer() {
 	std::streampos org = src.tellg();
-	auto& srcData = src.str();
+	const auto& srcData = src.str();
 
 	offset_ = org;
 
@@ -68,14 +68,14 @@ DWORD ByteBuffer::Read(LPVOID buf, DWORD size) {
 	return size;
 }
 
-_NODISCARD char* ByteBuffer::GetPointer(size_t offset) {
+[[nodiscard]] char* ByteBuffer::GetPointer(size_t offset) {
 #if _DEBUG
 	if (offset > GetSize())
 		throw gstd::wexception("ByteBuffer: Index out of bounds.");
 #endif
 	return reinterpret_cast<char*>(&data_[offset]);
 }
-_NODISCARD const char* ByteBuffer::GetPointer(size_t offset) const {
+[[nodiscard]] const char* ByteBuffer::GetPointer(size_t offset) const {
 #if _DEBUG
 	if (offset > GetSize())
 		throw gstd::wexception("ByteBuffer: Index out of bounds.");
@@ -378,7 +378,7 @@ DWORD File::Write(LPVOID buf, DWORD size) {
 	return hFile_.good();
 }
 
-bool File::Seek(size_t offset, DWORD way, AccessType type) {
+bool File::Seek(size_t offset, std::ios::seekdir way, AccessType type) {
 	if (!IsOpen()) return false;
 	hFile_.clear();
 	if (type == READ)
@@ -523,7 +523,7 @@ std::vector<ArchiveFileEntry*> FileManager::GetArchiveFilesInDirectory(const std
 			}
 		}
 		else {
-			if (pEntry->fullPath._Starts_with(dirNoModule)) {
+			if (pEntry->fullPath.starts_with(dirNoModule)) {
 				res.push_back((ArchiveFileEntry*)pEntry);
 			}
 		}
@@ -540,7 +540,7 @@ std::set<std::wstring> FileManager::GetArchiveSubDirectoriesInDirectory(const st
 	for (auto& [_, entryData] : mapArchiveEntries_) {
 		ArchiveFileEntry* pEntry = entryData.entry;
 
-		if (pEntry->fullPath._Starts_with(dirNoModule)) {
+		if (pEntry->fullPath.starts_with(dirNoModule)) {
 			size_t pos = pEntry->fullPath.find_first_of(L"/", dirNoModule.size());
 
 			if (pos != std::wstring::npos) {	// If the substr is a directory
@@ -572,7 +572,7 @@ bool FileManager::IsArchiveDirectoryExists(const std::wstring& _dir) {
 
 		for (auto& [path, _] : mapArchiveEntries_) {
 			std::wstring entryDir = PathProperty::GetFileDirectory(path);
-			if (entryDir._Starts_with(dir))
+			if (entryDir.starts_with(dir))
 				return true;
 		}
 	}

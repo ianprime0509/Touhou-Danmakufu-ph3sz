@@ -87,15 +87,15 @@ namespace gstd {
 		void SetSize(size_t size);
 		void Reserve(size_t newReserve);
 
-		_NODISCARD size_t GetSize() const { return data_.size(); }
-		_NODISCARD size_t GetOffset() const { return offset_; }
+		[[nodiscard]] size_t GetSize() const { return data_.size(); }
+		[[nodiscard]] size_t GetOffset() const { return offset_; }
 
 		void Seek(size_t pos);
 		virtual DWORD Write(LPVOID buf, DWORD size);
 		virtual DWORD Read(LPVOID buf, DWORD size);
 
-		_NODISCARD char* GetPointer(size_t offset = 0);
-		_NODISCARD const char* GetPointer(size_t offset = 0) const;
+		[[nodiscard]] char* GetPointer(size_t offset = 0);
+		[[nodiscard]] const char* GetPointer(size_t offset = 0) const;
 	};
 
 	//*******************************************************************
@@ -148,9 +148,9 @@ namespace gstd {
 		virtual DWORD Write(LPVOID buf, DWORD size);
 		virtual DWORD Read(LPVOID buf, DWORD size);
 
-		bool File::SetFilePointerBegin(AccessType type = READ) { return this->Seek(0, std::ios::beg, type); }
-		bool File::SetFilePointerEnd(AccessType type = READ) { return this->Seek(0, std::ios::end, type); }
-		bool Seek(size_t offset, DWORD way, AccessType type = READ);
+		bool SetFilePointerBegin(AccessType type = READ) { return this->Seek(0, std::ios::beg, type); }
+		bool SetFilePointerEnd(AccessType type = READ) { return this->Seek(0, std::ios::end, type); }
+		bool Seek(size_t offset, std::ios::seekdir way, AccessType type = READ);
 		size_t GetFilePointer(AccessType type = READ);
 	};
 

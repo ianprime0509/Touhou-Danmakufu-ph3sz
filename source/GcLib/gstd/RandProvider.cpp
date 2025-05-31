@@ -56,19 +56,19 @@ void RandProvider::Initialize(uint32_t s) {
 	memset(states_, 0x00, sizeof(uint64_t) * 4U);
 
 	static const uint64_t JUMP[] = 
-		{ 0x180ec6d33cfd0abaui64, 0xd5a61266f0c9392cui64, 0xa9582618e03fc9aaui64, 0x39abdc4529b1661cui64 };
+		{ 0x180ec6d33cfd0abaULL, 0xd5a61266f0c9392cULL, 0xa9582618e03fc9aaULL, 0x39abdc4529b1661cULL};
 
 	seed_ = s;
 
 	states_[0] = s ^ JUMP[0];
-	for (uint64_t i = 1ui64; i < 4ui64; ++i) {
-		uint64_t s = 0x76e15d3efefdcbbfui64 * states_[i - 1] ^ (states_[i - 1] >> 37) + i;
+	for (uint64_t i = 1ULL; i < 4ULL; ++i) {
+		uint64_t s = 0x76e15d3efefdcbbfULL * states_[i - 1] ^ (states_[i - 1] >> 37) + i;
 		s ^= JUMP[i];
-		states_[i] = s & 0xffffffffffffffffui64;
+		states_[i] = s & 0xffffffffffffffffULL;
 	}
 }
 uint64_t RandProvider::_GenrandInt64() {
-	uint64_t result = rotl(states_[1] * 5ui64, 7U) * 9ui64;
+	uint64_t result = rotl(states_[1] * 5ULL, 7U) * 9ULL;
 
 	uint64_t t = states_[1] << 17U;
 

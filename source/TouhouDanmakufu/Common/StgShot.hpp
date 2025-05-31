@@ -7,7 +7,6 @@
 
 class StgShotDataList;
 class StgShotData;
-struct StgShotDataFrame;
 class StgShotVertexBufferContainer;
 class StgShotObject;
 //*******************************************************************
@@ -135,6 +134,27 @@ public:
 //*******************************************************************
 //StgShotData
 //*******************************************************************
+struct StgShotDataFrame {
+	StgShotDataList* listShotData_;
+
+	StgShotVertexBufferContainer* pVertexBuffer_;
+	DWORD vertexOffset_;
+
+	DxRect<LONG> rcSrc_;
+	DxRect<float> rcDst_;
+
+	size_t frame_;
+public:
+	StgShotDataFrame();
+
+	DxRect<LONG>* GetSourceRect() { return &rcSrc_; }
+	DxRect<float>* GetDestRect() { return &rcDst_; }
+	StgShotVertexBufferContainer* GetVertexBufferContainer() {
+		return pVertexBuffer_;
+	}
+
+	static DxRect<float> LoadDestRect(DxRect<LONG>* src);
+};
 class StgShotData {
 	friend StgShotDataList;
 private:
@@ -179,27 +199,6 @@ public:
 	double GetAngularVelocityMax() { return angularVelocityMax_; }
 	bool IsFixedAngle() { return bFixedAngle_; }
 };
-struct StgShotDataFrame {
-	StgShotDataList* listShotData_;
-
-	StgShotVertexBufferContainer* pVertexBuffer_;
-	DWORD vertexOffset_;
-
-	DxRect<LONG> rcSrc_;
-	DxRect<float> rcDst_;
-
-	size_t frame_;
-public:
-	StgShotDataFrame();
-
-	DxRect<LONG>* GetSourceRect() { return &rcSrc_; }
-	DxRect<float>* GetDestRect() { return &rcDst_; }
-	StgShotVertexBufferContainer* GetVertexBufferContainer() {
-		return pVertexBuffer_;
-	}
-
-	static DxRect<float> LoadDestRect(DxRect<LONG>* src);
-};
 
 //*******************************************************************
 //StgShotVertexBufferContainer
@@ -234,7 +233,26 @@ public:
 //*******************************************************************
 //StgShotObject
 //*******************************************************************
-struct StgShotPatternTransform;
+struct StgShotPatternTransform {
+	enum : uint8_t {
+		TRANSFORM_WAIT,
+		TRANSFORM_ADD_SPEED_ANGLE,
+		TRANSFORM_ANGULAR_MOVE,
+		TRANSFORM_N_DECEL_CHANGE,
+		TRANSFORM_GRAPHIC_CHANGE,
+		TRANSFORM_BLEND_CHANGE,
+		TRANSFORM_TO_SPEED_ANGLE,
+		TRANSFORM_ADDPATTERN_A1,
+		TRANSFORM_ADDPATTERN_A2,
+		TRANSFORM_ADDPATTERN_B1,
+		TRANSFORM_ADDPATTERN_B2,
+		TRANSFORM_ADDPATTERN_C1,
+		TRANSFORM_ADDPATTERN_C2,
+		//TRANSFORM_,
+	};
+	uint8_t act = 0xff;
+	double param[8];
+};
 class StgShotObject : public DxScriptShaderObject, public StgMoveObject, public StgIntersectionObject {
 protected:
 	using TypeDelete = StgShotManager::TypeDelete;
@@ -785,24 +803,4 @@ public:
 		laserWidth_ = width;
 		laserLength_ = length;
 	}
-};
-struct StgShotPatternTransform {
-	enum : uint8_t {
-		TRANSFORM_WAIT,
-		TRANSFORM_ADD_SPEED_ANGLE,
-		TRANSFORM_ANGULAR_MOVE,
-		TRANSFORM_N_DECEL_CHANGE,
-		TRANSFORM_GRAPHIC_CHANGE,
-		TRANSFORM_BLEND_CHANGE,
-		TRANSFORM_TO_SPEED_ANGLE,
-		TRANSFORM_ADDPATTERN_A1,
-		TRANSFORM_ADDPATTERN_A2,
-		TRANSFORM_ADDPATTERN_B1,
-		TRANSFORM_ADDPATTERN_B2,
-		TRANSFORM_ADDPATTERN_C1,
-		TRANSFORM_ADDPATTERN_C2,
-		//TRANSFORM_,
-	};
-	uint8_t act = 0xff;
-	double param[8];
 };

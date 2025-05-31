@@ -1150,7 +1150,7 @@ bool DxTextFileObject::_ParseLines(std::vector<char>& src) {
 
 			auto itr = src.begin() + bomSize_;
 			for (; itr != src.end();) {
-				wchar_t* wch = (wchar_t*)itr._Ptr;
+				wchar_t* wch = (wchar_t*)&*itr;
 				if (*wch == CH_LF) {
 					push_line(tmp);
 					tmp.clear();

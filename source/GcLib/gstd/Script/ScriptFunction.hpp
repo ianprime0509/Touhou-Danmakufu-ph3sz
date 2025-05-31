@@ -40,7 +40,7 @@ namespace gstd {
 
 	class BaseFunction {
 	public:
-		static const void BaseFunction::_raise_error_unsupported(script_machine* machine, type_data* type, const std::string& op_name);
+		static const void _raise_error_unsupported(script_machine* machine, type_data* type, const std::string& op_name);
 
 		static type_data::type_kind _type_test_promotion(type_data* type_l, type_data* type_r);
 

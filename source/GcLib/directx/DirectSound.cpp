@@ -47,7 +47,7 @@ bool DirectSoundManager::Initialize(HWND hWnd) {
 	auto WrapDX = [&](HRESULT hr, const std::wstring& routine) {
 		if (SUCCEEDED(hr)) return;
 		std::wstring err = StringUtility::Format(L"DirectSound: %s failure. [%s]\r\n  %s",
-			routine.c_str(), DXGetErrorString(hr), DXGetErrorDescription(hr));
+			routine.c_str(), DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 		Logger::WriteTop(err);
 		throw wexception(err);
 	};
@@ -1003,7 +1003,7 @@ void SoundPlayer::SetFrequency(DWORD freq) {
 		}
 		HRESULT hr = pDirectSoundBuffer_->SetFrequency(freq);
 		//std::wstring err = StringUtility::Format(L"%s: %s",
-		//	DXGetErrorString(hr), DXGetErrorDescription(hr));
+		//	DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 	}
 }
 

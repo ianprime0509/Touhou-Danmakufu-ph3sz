@@ -17,7 +17,7 @@ namespace gstd {
 		_ptr_ref_counter(T* src) noexcept {
 			pPtr_ = src;
 		}
-		template<class U, bool ATOMIC> _ptr_ref_counter(const _ptr_ref_counter<U, ATOMIC>& other) noexcept {
+		template<class U, bool ATOMIC_U> _ptr_ref_counter(const _ptr_ref_counter<U, ATOMIC_U>& other) noexcept {
 			countRef_ = other.countRef_;
 			countWeak_ = other.countWeak_;
 			pPtr_ = (T*)other.pPtr_;
@@ -29,8 +29,8 @@ namespace gstd {
 			pPtr_ = other.pPtr_;
 			return *this;
 		}
-		template<class U, bool ATOMIC>
-		_ptr_ref_counter<T, ATOMIC>& operator=(_ptr_ref_counter<U, ATOMIC>& other) noexcept {
+		template<class U, bool ATOMIC_U>
+		_ptr_ref_counter<T, ATOMIC>& operator=(_ptr_ref_counter<U, ATOMIC_U>& other) noexcept {
 			countRef_ = other.countRef_;
 			countWeak_ = other.countWeak_;
 			pPtr_ = (T*)other.pPtr_;
@@ -50,15 +50,15 @@ namespace gstd {
 		}
 
 		inline void AddRef() noexcept {
-			if constexpr (ATOMIC) _MT_INCR(countRef_);
+			if constexpr (ATOMIC) __atomic_add_fetch(&countRef_, 1, __ATOMIC_SEQ_CST);
 			else ++countRef_;
 		}
 		inline void AddRefWeak() noexcept {
-			if constexpr (ATOMIC) _MT_INCR(countWeak_);
+			if constexpr (ATOMIC) __atomic_add_fetch(&countRef_, 1, __ATOMIC_SEQ_CST);
 			else ++countWeak_;
 		}
 		bool RemoveRef() noexcept {
-			if constexpr (ATOMIC) _MT_DECR(countRef_);
+			if constexpr (ATOMIC) __atomic_add_fetch(&countRef_, -1, __ATOMIC_SEQ_CST);
 			else --countRef_;
 
 			if (countRef_ == 0) {
@@ -68,7 +68,7 @@ namespace gstd {
 			return true;
 		}
 		bool RemoveRefWeak() noexcept {
-			if constexpr (ATOMIC) _MT_DECR(countWeak_);
+			if constexpr (ATOMIC) __atomic_add_fetch(&countRef_, -1, __ATOMIC_SEQ_CST);
 			else --countWeak_;
 
 			if (countWeak_ == 0) {
@@ -87,9 +87,9 @@ namespace gstd {
 	// A non-atomic smart pointer
 	template<class T, bool ATOMIC = true>
 	class ref_count_ptr {
-		template<class U, bool ATOMIC> friend class ref_count_ptr;
+		template<class U, bool ATOMIC_U> friend class ref_count_ptr;
 		friend ref_count_weak_ptr<T, ATOMIC>;
-		template<class U, bool ATOMIC> friend class ref_count_weak_ptr;
+		template<class U, bool ATOMIC_U> friend class ref_count_weak_ptr;
 	public:
 		using _MyCounter = _ptr_ref_counter<T, ATOMIC>;
 		using _MyType = ref_count_ptr<T, ATOMIC>;
@@ -212,7 +212,7 @@ namespace gstd {
 
 		//----------------------------------------------------------------------
 
-		template<class U> static _MyType Cast(ref_count_ptr<U, ATOMIC>& src) {
+		template<class U> static _MyType Cast(const ref_count_ptr<U, ATOMIC>& src) {
 			_MyType res;
 			if (T* castPtr = dynamic_cast<T*>(src.get())) {
 				res._SetPointerFromInfo<U>(src.pInfo_, castPtr);
@@ -224,8 +224,8 @@ namespace gstd {
 	// A non-atomic smart pointer (weak ref)
 	template<class T, bool ATOMIC = true>
 	class ref_count_weak_ptr {
-		template<class U, bool ATOMIC> friend class ref_count_weak_ptr;
-		template<class U, bool ATOMIC> friend class ref_count_ptr;
+		template<class U, bool ATOMIC_U> friend class ref_count_weak_ptr;
+		template<class U, bool ATOMIC_U> friend class ref_count_ptr;
 	public:
 		using _MyCounter = _ptr_ref_counter<T, ATOMIC>;
 		using _MyType = ref_count_weak_ptr<T, ATOMIC>;
@@ -258,10 +258,10 @@ namespace gstd {
 		ref_count_weak_ptr(const _MyType& src) {
 			this->_SetPointerFromInfo<T>(src.pInfo_, src.pPtr_);
 		}
-		ref_count_weak_ptr(ref_count_ptr<T, ATOMIC>& src) {
+		ref_count_weak_ptr(const ref_count_ptr<T, ATOMIC>& src) {
 			this->_SetPointerFromInfo<T>(src.pInfo_, src.pPtr_);
 		}
-		template<class U> ref_count_weak_ptr(ref_count_weak_ptr<U, ATOMIC>& src) {
+		template<class U> ref_count_weak_ptr(const ref_count_weak_ptr<U, ATOMIC>& src) {
 			this->_SetPointerFromInfo<U>(src.pInfo_, (T*)src.pPtr_);
 		}
 		template<class U> ref_count_weak_ptr(ref_count_ptr<U, ATOMIC>& src) {
@@ -298,7 +298,7 @@ namespace gstd {
 		ref_count_ptr<T, ATOMIC> Lock() {	// Create a ref_count_ptr from a weak pointer
 			ref_count_ptr<T, ATOMIC> res;
 			if (IsExists())
-				res._SetPointerFromInfo<T>(pInfo_, pPtr_);
+				res.template _SetPointerFromInfo<T>(pInfo_, pPtr_);
 			return res;
 		}
 

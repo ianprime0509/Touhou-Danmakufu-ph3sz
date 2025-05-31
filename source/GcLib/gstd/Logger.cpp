@@ -586,7 +586,7 @@ void WindowLogger::PanelEventLog::ProcessGui() {
 		size_t m = s / 60;
 		size_t h = m / 60;
 
-		ImGui::Text("Time elapsed: %u:%u:%u.%04u", h, m % 60, s % 60, elapsedMs % 1000);
+		ImGui::Text("Time elapsed: %u:%u:%u.%04lld", h, m % 60, s % 60, elapsedMs % 1000);
 	}
 }
 
@@ -717,8 +717,8 @@ void WindowLogger::PanelInfo::_GetRamInfo() {
 		mse.dwLength = sizeof(MEMORYSTATUSEX);
 		GlobalMemoryStatusEx(&mse);
 
-		ramMemAvail_ = mse.ullAvailVirtual / (1024ui64 * 1024ui64);
-		ramMemMax_ = mse.ullTotalVirtual / (1024ui64 * 1024ui64);
+		ramMemAvail_ = mse.ullAvailVirtual / (1024ULL * 1024ULL);
+		ramMemMax_ = mse.ullTotalVirtual / (1024ULL * 1024ULL);
 		
 		// Get CPU info
 		rateCpuUsage_ = std::clamp<double>(_GetCpuPerformance(), 0, 100);

@@ -829,81 +829,82 @@ D3DXMATRIX _script_unpack_matrix(script_machine* machine, const value& v) {
 	D3DXMATRIX res;
 	FLOAT* ptrMat = (FLOAT*)&res;
 
-	if (!v.has_data() || v.get_type() == nullptr)
-		goto lab_type_invalid;
+	if (!v.has_data() || v.get_type() == nullptr) {
+		std::string err = "Invalid value type for matrix.";
+		machine->raise_error(err);
+		return res;
+	}
 
 	type_data* typeElem = v.get_type()->get_element();
-	if (typeElem == nullptr)
-		goto lab_type_invalid;
+	if (typeElem == nullptr) {
+		std::string err = "Invalid value type for matrix.";
+		machine->raise_error(err);
+		return res;
+	}
 
 	if (typeElem->get_kind() == type_data::tk_array) {
-		if (v.length_as_array() != 4U)
-			goto lab_size_invalid;
+		if (v.length_as_array() != 4U) {
+			std::string err = "Matrix size must be 4x4.";
+			machine->raise_error(err);
+			return res;
+		}
 
 		for (size_t i = 0; i < 4; ++i) {
 			type_data* typeElemElem = typeElem->get_element();
-			if (typeElemElem == nullptr)
-				goto lab_type_invalid;
+			if (typeElemElem == nullptr) {
+				std::string err = "Invalid value type for matrix.";
+				machine->raise_error(err);
+				return res;
+			}
 
 			const value& subArray = v[i];
-			if (subArray.length_as_array() != 4U)
-				goto lab_size_invalid;
+			if (subArray.length_as_array() != 4U) {
+				std::string err = "Matrix size must be 4x4.";
+				machine->raise_error(err);
+				return res;
+			}
 
 			for (size_t j = 0; j < 4; ++i)
 				ptrMat[i * 4 + j] = subArray[j].as_float();
 		}
 	}
 	else {
-		if (v.length_as_array() != 16U)
-			goto lab_size_invalid;
+		if (v.length_as_array() != 16U) {
+			std::string err = "Matrix size must be 4x4.";
+			machine->raise_error(err);
+			return res;
+		}
 
 		for (size_t i = 0; i < 16; ++i)
 			ptrMat[i] = v[i].as_float();
 	}
 	
-	goto lab_return;
-lab_size_invalid:
-	{
-		std::string err = "Matrix size must be 4x4.";
-		machine->raise_error(err);
-		goto lab_return;
-	}
-lab_type_invalid:
-	{
-		std::string err = "Invalid value type for matrix.";
-		machine->raise_error(err);
-	}
-lab_return:
 	return res;
 }
 D3DXVECTOR3 _script_unpack_vector3(script_machine* machine, const value& v) {
 	D3DXVECTOR3 res;
 
-	if (!v.has_data())
-		goto lab_type_invalid;
-	if (v.get_type()->get_kind() != type_data::tk_array)
-		goto lab_type_invalid;
-	if (v.length_as_array() != 3)
-		goto lab_size_invalid;
+	if (!v.has_data()) {
+		std::string err = "Invalid value type for vector.";
+		machine->raise_error(err);
+		return res;
+	}
+	if (v.get_type()->get_kind() != type_data::tk_array) {
+		std::string err = "Invalid value type for vector.";
+		machine->raise_error(err);
+		return res;
+	}
+	if (v.length_as_array() != 3) {
+		std::string err = "Incorrect vector size. (Expected 3)";
+		machine->raise_error(err);
+		return res;
+	}
 
 	res = D3DXVECTOR3(
 		(FLOAT)v[0].as_float(), 
 		(FLOAT)v[1].as_float(), 
 		(FLOAT)v[2].as_float());
 
-	goto lab_return;
-lab_size_invalid:
-	{
-		std::string err = "Incorrect vector size. (Expected 3)";
-		machine->raise_error(err);
-		goto lab_return;
-	}
-lab_type_invalid:
-	{
-		std::string err = "Invalid value type for vector.";
-		machine->raise_error(err);
-	}
-lab_return:
 	return res;
 }
 
@@ -2177,32 +2178,34 @@ gstd::value DxScript::Func_Get2dPosition(gstd::script_machine* machine, int argc
 static std::vector<DxPoint> _script_value_to_dxpolygon(script_machine* machine, const gstd::value* v) {
 	std::vector<DxPoint> res;
 
-	if (!v->has_data())
-		goto lab_value_invalid;
+	if (!v->has_data()) {
+		std::string err = "Invalid value for polygon.";
+		machine->raise_error(err);
+		return res;
+	}
 
 	type_data* typeElem = v->get_type()->get_element();
-	if (typeElem == nullptr)
-		goto lab_value_invalid;
+	if (typeElem == nullptr) {
+		std::string err = "Invalid value for polygon.";
+		machine->raise_error(err);
+		return res;
+	}
 
 	res.resize(v->length_as_array());
 	for (size_t i = 0; i < res.size(); ++i) {
 		const value& subArray = (*v)[i];
 
 		type_data* typeElemElem = typeElem->get_element();
-		if (typeElemElem == nullptr || subArray.length_as_array() != 2U)
-			goto lab_value_invalid;
+		if (typeElemElem == nullptr || subArray.length_as_array() != 2U) {
+			std::string err = "Invalid value for polygon.";
+			machine->raise_error(err);
+			return res;
+		}
 
 		res[i] = DxPoint(subArray[0].as_float(), 
 			subArray[1].as_float());
 	}
 
-	goto lab_return;
-lab_value_invalid:
-	{
-		std::string err = "Invalid value for polygon.";
-		machine->raise_error(err);
-	}
-lab_return:
 	return res;
 }
 gstd::value DxScript::Func_IsIntersected_Point_Polygon(gstd::script_machine* machine, int argc, const gstd::value* argv) {
@@ -5271,7 +5274,7 @@ gstd::value DxScript::Func_ObjFile_GetSize(gstd::script_machine* machine, int ar
 	int res = 0;
 	DxFileObject* obj = script->GetObjectPointerAs<DxFileObject>(id);
 	if (obj) {
-		shared_ptr<File>& file = obj->GetFile();
+		const shared_ptr<File>& file = obj->GetFile();
 		res = file != nullptr ? file->GetSize() : 0;
 	}
 	return script->CreateIntValue(res);

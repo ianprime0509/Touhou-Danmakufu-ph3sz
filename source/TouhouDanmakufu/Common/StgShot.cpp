@@ -335,7 +335,7 @@ void StgShotDataList::_LoadVertexBuffers(std::map<std::wstring, VBContainerList>
 		if (FAILED(hr)) {
 			std::wstring err = StringUtility::Format(L"AddShotDataList::Failed to load shot data buffer: "
 				"\t\r\n%s: %s",
-				DXGetErrorString(hr), DXGetErrorDescription(hr));
+				DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 			throw gstd::wexception(err);
 		}
 

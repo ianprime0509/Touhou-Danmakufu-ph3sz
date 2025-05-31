@@ -89,7 +89,11 @@ namespace directx {
 
 		//ARGB
 		static inline D3DCOLOR ToD3DCOLOR(const __m128i& col) {
-			return D3DCOLOR_ARGB(col.m128i_i32[0], col.m128i_i32[1], col.m128i_i32[2], col.m128i_i32[3]);
+			return D3DCOLOR_ARGB(
+				_mm_extract_epi32(col, 0),
+				_mm_extract_epi32(col, 1),
+				_mm_extract_epi32(col, 2),
+				_mm_extract_epi32(col, 3));
 		}
 		//ARGB, vector of [0~255]
 		static inline D3DCOLOR ToD3DCOLOR(const D3DXVECTOR4& col) {

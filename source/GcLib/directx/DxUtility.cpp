@@ -63,15 +63,18 @@ D3DXVECTOR4 ColorAccess::ClampColorPacked(const D3DXVECTOR4& src) {
 }
 D3DXVECTOR4 ColorAccess::ClampColorPacked(const __m128i& src) {
 	__m128i ci = ColorAccess::ClampColorPackedM(src);
-	return D3DXVECTOR4(ci.m128i_i32[0], ci.m128i_i32[1], ci.m128i_i32[2], ci.m128i_i32[3]);
+	return D3DXVECTOR4(
+		_mm_extract_epi32(ci, 0),
+		_mm_extract_epi32(ci, 1),
+		_mm_extract_epi32(ci, 2),
+		_mm_extract_epi32(ci, 3));
 }
 __m128i ColorAccess::ClampColorPackedM(const D3DXVECTOR4& src) {
 	__m128i ci = Vectorize::SetI(src[0], src[1], src[2], src[3]);
 	return ColorAccess::ClampColorPackedM(ci);
 }
 __m128i ColorAccess::ClampColorPackedM(const __m128i& src) {
-	return (__m128i&)Vectorize::Clamp(src, 
-		Vectorize::Replicate(0x00), Vectorize::Replicate(0xff));
+	return Vectorize::Clamp(src, Vectorize::Replicate(0x00), Vectorize::Replicate(0xff));
 }
 
 D3DXVECTOR3& ColorAccess::RGBtoHSV(D3DXVECTOR3& color, int red, int green, int blue) {
@@ -125,7 +128,10 @@ D3DCOLOR& ColorAccess::HSVtoRGB(D3DCOLOR& color, int hue, int saturation, int va
 	auto GenColor = [](int r, int g, int b) -> D3DCOLOR {
 		__m128i ci = Vectorize::Set(r, g, b, 0);
 		ci = ColorAccess::ClampColorPackedM(ci);
-		return D3DCOLOR_XRGB(ci.m128i_i32[0], ci.m128i_i32[1], ci.m128i_i32[2]);
+		return D3DCOLOR_XRGB(
+			_mm_extract_epi32(ci, 0), 
+			_mm_extract_epi32(ci, 1),
+			_mm_extract_epi32(ci, 2));
 	};
 
 	D3DCOLOR rgb = 0xffffffff;

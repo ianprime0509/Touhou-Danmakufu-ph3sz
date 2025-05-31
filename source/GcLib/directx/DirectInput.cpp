@@ -48,7 +48,7 @@ bool DirectInput::Initialize(HWND hWnd) {
 void DirectInput::_WrapDXErr(HRESULT hr, const std::string& routine, const std::string& msg, bool bThrow) {
 	if (SUCCEEDED(hr)) return;
 	std::string err = StringUtility::Format("DirectInput::%s: %s. [%s]\r\n  %s",
-		routine.c_str(), msg.c_str(), DXGetErrorStringA(hr), DXGetErrorDescriptionA(hr));
+		routine.c_str(), msg.c_str(), DXGetErrorString9A(hr), DXGetErrorDescription9A(hr));
 	Logger::WriteError(err);
 	if (bThrow) throw wexception(err);
 }

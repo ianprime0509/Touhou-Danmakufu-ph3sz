@@ -125,6 +125,27 @@ public:
 //*******************************************************************
 //StgItemData
 //*******************************************************************
+struct StgItemDataFrame {
+	StgItemDataList* listItemData_;
+
+	StgShotVertexBufferContainer* pVertexBuffer_;
+	DWORD vertexOffset_;
+
+	DxRect<LONG> rcSrc_;
+	DxRect<float> rcDst_;
+
+	size_t frame_;
+public:
+	StgItemDataFrame();
+
+	DxRect<LONG>* GetSourceRect() { return &rcSrc_; }
+	DxRect<float>* GetDestRect() { return &rcDst_; }
+	StgShotVertexBufferContainer* GetVertexBufferContainer() {
+		return pVertexBuffer_;
+	}
+
+	static DxRect<float> LoadDestRect(DxRect<LONG>* src);
+};
 class StgItemData {
 	friend StgItemDataList;
 private:
@@ -152,27 +173,6 @@ public:
 
 	StgItemDataFrame* GetFrame(size_t frame);
 	size_t GetFrameCount() { return listFrame_.size(); }
-};
-struct StgItemDataFrame {
-	StgItemDataList* listItemData_;
-
-	StgShotVertexBufferContainer* pVertexBuffer_;
-	DWORD vertexOffset_;
-
-	DxRect<LONG> rcSrc_;
-	DxRect<float> rcDst_;
-
-	size_t frame_;
-public:
-	StgItemDataFrame();
-
-	DxRect<LONG>* GetSourceRect() { return &rcSrc_; }
-	DxRect<float>* GetDestRect() { return &rcDst_; }
-	StgShotVertexBufferContainer* GetVertexBufferContainer() {
-		return pVertexBuffer_;
-	}
-
-	static DxRect<float> LoadDestRect(DxRect<LONG>* src);
 };
 
 //*******************************************************************

@@ -11,11 +11,11 @@ CpuInformation::CpuInformation() {
 	std::array<int32_t, 4> cpui{};
 
 	// Get highest valid value for processor information
-	__cpuid(cpui.data(), 0);
+	__cpuid(0, cpui[0], cpui[1], cpui[2], cpui[3]);
 	nIds = cpui[0];
 
 	// Get highest valid value for extended processor information
-	__cpuid(cpui.data(), 0x80000000);
+	__cpuid(0x80000000, cpui[0], cpui[1], cpui[2], cpui[3]);
 	nExIds = cpui[0];
 
 	// Read all basic information

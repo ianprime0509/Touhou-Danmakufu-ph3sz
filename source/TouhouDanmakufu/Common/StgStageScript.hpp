@@ -26,7 +26,7 @@ public:
 	virtual ~StgStageScriptManager();
 
 	virtual void SetError(std::wstring error);
-	virtual bool IsError();
+	virtual bool IsError() override;
 
 	shared_ptr<StgStageScriptObjectManager> GetObjectManager() { return objManager_; }
 	virtual shared_ptr<ManagedScript> Create(shared_ptr<ScriptManager> manager, int type) override;

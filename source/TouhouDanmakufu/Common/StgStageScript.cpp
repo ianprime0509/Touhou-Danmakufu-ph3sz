@@ -1262,7 +1262,7 @@ gstd::value StgStageScript::Func_GetEnemyBossObjectID(gstd::script_machine* mach
 
 	std::vector<int> listID;
 	if (scene) {
-		if (auto& data = scene->GetActiveData()) {
+		if (const auto& data = scene->GetActiveData()) {
 			for (auto& iEnemy : data->GetEnemyObjectList()) {
 				if (iEnemy->IsDeleted()) continue;
 				listID.push_back(iEnemy->GetObjectID());

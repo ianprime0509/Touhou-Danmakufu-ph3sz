@@ -454,7 +454,7 @@ namespace directx {
 						strCompileError = reinterpret_cast<const char*>(error->GetBufferPointer());
 					std::string err = StringUtility::Format(
 						"RenderShaderLibrary: Shader compile failed. [%s]\r\n\t%s\r\n\t%s",
-						name->c_str(), DXGetErrorStringA(hr), strCompileError);
+						name->c_str(), DXGetErrorString9A(hr), strCompileError);
 					throw gstd::wexception(err);
 				}
 			}
@@ -479,7 +479,7 @@ namespace directx {
 				if (FAILED(hr)) {
 					std::string err = StringUtility::Format(
 						"RenderShaderLibrary: CreateVertexDeclaration failed. [%s]\r\n\t%s",
-						name.c_str(), DXGetErrorStringA(hr));
+						name.c_str(), DXGetErrorString9A(hr));
 					throw gstd::wexception(err);
 				}
 			}

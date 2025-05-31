@@ -325,7 +325,7 @@ namespace gstd {
 		if (type) {
 			switch (type->get_kind()) {
 			case type_data::tk_int:
-				res.reset(type, 0i64); break;
+				res.reset(type, 0LL); break;
 			case type_data::tk_float:
 				res.reset(type, 0.0); break;
 			case type_data::tk_char:
@@ -727,7 +727,7 @@ namespace gstd {
 
 		switch (argv->get_type()->get_kind()) {
 		case type_data::tk_int:
-			return value(argv->get_type(), argv->as_int() - 1i64);
+			return value(argv->get_type(), argv->as_int() - 1LL);
 		case type_data::tk_float:
 			return value(argv->get_type(), argv->as_float() - 1);
 		case type_data::tk_char:
@@ -757,7 +757,7 @@ namespace gstd {
 
 		switch (argv->get_type()->get_kind()) {
 		case type_data::tk_int:
-			return value(argv->get_type(), argv->as_int() + 1i64);
+			return value(argv->get_type(), argv->as_int() + 1LL);
 		case type_data::tk_float:
 			return value(argv->get_type(), argv->as_float() + 1);
 		case type_data::tk_char:

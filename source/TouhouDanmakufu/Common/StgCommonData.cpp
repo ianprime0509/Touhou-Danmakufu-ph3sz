@@ -276,7 +276,7 @@ void ScriptCommonDataInfoPanel::Update() {
 		Lock lock(Logger::GetTop()->GetLock());
 
 		for (auto& task : taskManager->GetTaskList()) {
-			if (auto& systemController = dptr_cast(StgSystemController, task)) {
+			if (const auto& systemController = dptr_cast(StgSystemController, task)) {
 				auto cdataManager = systemController->GetCommonDataManager();
 
 				for (auto& [name, area] : *cdataManager) {

@@ -288,3 +288,7 @@ __pycache__/
 
 # code
 /source/GcLib/gstd/ArchiveEncryption.hpp
+
+# Zig
+.zig-cache
+zig-out

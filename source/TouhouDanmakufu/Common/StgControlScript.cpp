@@ -1460,7 +1460,7 @@ void ScriptInfoPanel::Update() {
 		std::list<shared_ptr<TaskBase>>& listTask = taskManager->GetTaskList();
 
 		for (auto& task : listTask) {
-			if (auto& systemController = dptr_cast(StgSystemController, task)) {
+			if (const auto& systemController = dptr_cast(StgSystemController, task)) {
 				{
 					auto& pCacheMap = systemController->GetScriptEngineCache()->GetMap();
 
@@ -1911,7 +1911,7 @@ void ScriptInfoPanel::_TerminateScriptAll() {
 	std::list<shared_ptr<TaskBase>>& listTask = taskManager->GetTaskList();
 
 	for (auto& task : listTask) {
-		if (auto& systemController = dptr_cast(StgSystemController, task)) {
+		if (const auto& systemController = dptr_cast(StgSystemController, task)) {
 			systemController->TerminateScriptAll();
 			break;
 		}

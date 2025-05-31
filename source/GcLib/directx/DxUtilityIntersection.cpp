@@ -52,9 +52,12 @@ size_t DxIntersect::SplitWidthLine(DxLine* dest, const DxWidthLine* pSrcLine, fl
 		Vectorize::Replicate(width / dl * 0.5f));
 	{
 		__m128 res = Vectorize::Add(vec1, vec2);
-		dest[0] = DxLine(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2], res.m128_f32[3]);
+		float resf[4];
+		_mm_storeu_ps(resf, res);
+		dest[0] = DxLine(resf[0], resf[1], resf[2], resf[3]);
 		res = Vectorize::Sub(vec1, vec2);
-		dest[1] = DxLine(res.m128_f32[0], res.m128_f32[1], res.m128_f32[2], res.m128_f32[3]);
+		_mm_storeu_ps(resf, res);
+		dest[1] = DxLine(resf[0], resf[1], resf[2], resf[3]);
 	}
 
 	return 2U;

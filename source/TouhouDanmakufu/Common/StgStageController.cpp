@@ -457,7 +457,7 @@ StgStageInformation::StgStageInformation() {
 	priCameraFocusPermit_ = 69;
 
 	rand_ = make_shared<RandProvider>();
-	rand_->Initialize((uint32_t)SystemUtility::GetCpuTime2() ^ 0xf5682aebui32);
+	rand_->Initialize((uint32_t)SystemUtility::GetCpuTime2() ^ 0xf5682aebU);
 	score_ = 0;
 	graze_ = 0;
 	point_ = 0;

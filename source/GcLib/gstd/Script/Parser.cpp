@@ -181,7 +181,7 @@ static const std::vector<function> base_operations = {
 
 parser::symbol* parser::scope_t::singular_insert(const std::string& name, const symbol& s, int argc) {
 	bool exists = this->find(name) != this->end();
-	auto& [itrStart, itrEnd] = this->equal_range(name);
+	const auto& [itrStart, itrEnd] = this->equal_range(name);
 
 	//Uh oh! Duplication!
 	if (exists) {
@@ -1214,7 +1214,7 @@ void parser::parse_logic(script_block* block, parser_state_t* state) {
 	bool hasExpr = false;
 
 	size_t base_hash = ((size_t)block ^ 0x45f60e21u) + ((size_t)state ^ 0xce189a9bu) + state->ip * 0x56d3;
-	size_t iter = 0x80000000 + (std::_Hash_array_representation((byte*)&base_hash, 4U) & 0x04ffffff);
+	size_t iter = 0x80000000 + (_Hash_array_representation((byte*)&base_hash, 4U) & 0x04ffffff);
 	while (state->next() == token_kind::tk_logic_and || state->next() == token_kind::tk_logic_or) {
 		hasExpr = true;
 
@@ -1727,7 +1727,7 @@ void parser::parse_single_statement(script_block* block, parser_state_t* state,
 
 			//The counter
 			state->AddCode(block, code(command_kind::pc_push_value,
-				value(script_type_manager::get_int_type(), 0i64)));
+				value(script_type_manager::get_int_type(), 0LL)));
 
 			size_t ip = state->ip;
 
@@ -2345,7 +2345,7 @@ void parser::parse_single_statement(script_block* block, parser_state_t* state,
 		script_block* asyncBlock = engine->new_block(block->level + 1, block_kind::bk_microthread);
 #ifdef _DEBUG
 		asyncBlock->name = StringUtility::Format("!@_bk_async_%08x", 
-			std::hash<uint32_t>::_Do_hash(((uint32_t)block ^ (uint32_t)state) * state->ip + block->level));
+			std::hash<uint32_t>{}(((uint32_t)block ^ (uint32_t)state) * state->ip + block->level));
 #else
 		asyncBlock->name = "";
 #endif

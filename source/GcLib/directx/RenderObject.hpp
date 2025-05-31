@@ -143,7 +143,7 @@ namespace directx {
 		void SetPrimitiveType(D3DPRIMITIVETYPE type) { typePrimitive_ = type; }
 		D3DPRIMITIVETYPE GetPrimitiveType() { return typePrimitive_; }
 		virtual void SetVertexCount(size_t count) {
-			count = std::min(count, 65536U);
+			count = std::min(count, 65536uz);
 			vertex_.resize(count * strideVertexStreamZero_);
 			ZeroMemory(vertex_.data(), vertex_.size());
 		}

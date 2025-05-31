@@ -90,10 +90,10 @@ void CriticalSection::Leave() {
 		countLock_--;
 		if (countLock_ != 0) return;
 		if (countLock_ < 0)
-			throw std::exception("CriticalSection: Thread is not locked.");
+			throw std::runtime_error("CriticalSection: Thread is not locked.");
 	}
 	else {
-		throw std::exception("CriticalSection: Thread cannot be locked.");
+		throw std::runtime_error("CriticalSection: Thread cannot be locked.");
 	}
 	idThread_ = 0;
 	::LeaveCriticalSection(&cs_);

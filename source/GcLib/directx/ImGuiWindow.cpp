@@ -81,7 +81,7 @@ bool ImGuiDirectGraphics::Initialize(HWND hWnd) {
 		if (FAILED(hrDevice)) {
 			std::wstring err = StringUtility::Format(
 				L"Cannot create Direct3D device. [%s]\r\n  %s",
-				DXGetErrorString(hrDevice), DXGetErrorDescription(hrDevice));
+				DXGetErrorString9(hrDevice), DXGetErrorDescription9(hrDevice));
 			throw wexception(err);
 		}
 	}
@@ -106,8 +106,8 @@ bool ImGuiDirectGraphics::BeginScene(bool bClear) {
 
 	HRESULT hr = pDevice_->BeginScene();
 	if (FAILED(hr)) {
-		const wchar_t* str = DXGetErrorStringW(hr);
-		const wchar_t* desc = DXGetErrorDescriptionW(hr);
+		const wchar_t* str = DXGetErrorString9W(hr);
+		const wchar_t* desc = DXGetErrorDescription9W(hr);
 
 
 	}

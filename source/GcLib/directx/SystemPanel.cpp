@@ -447,11 +447,11 @@ void SystemInfoPanel::ProcessGui() {
 			{
 				auto _Line = [=](float indent, float gap, uint64_t v1, uint64_t v2) {
 					ImGui::SameLine(indent);
-					ImGui::Text("%u", v1);
+					ImGui::Text("%" PRIu64, v1);
 					ImGui::SameLine(indent + gap);
 					ImGui::TextUnformatted("/");
 					ImGui::SameLine(indent + 15 + gap);
-					ImGui::Text("%u", v2);
+					ImGui::Text("%" PRIu64, v2);
 					ImGui::SameLine(indent + 20 + gap * 2);
 					ImGui::TextUnformatted("MB");
 
@@ -461,7 +461,7 @@ void SystemInfoPanel::ProcessGui() {
 					ImGui::ProgressBar(v1 / (float)v2, ImVec2(128, height), "");
 				};
 
-				constexpr uint64_t mb = 1024ui64 * 1024ui64;
+				constexpr uint64_t mb = 1024ULL * 1024ULL;
 
 				ImGui::TextUnformatted("Physical:");
 				_Line(indent + 120, 50, memoryStatus.ullAvailPhys / mb, memoryStatus.ullTotalPhys / mb);
@@ -497,11 +497,11 @@ void SystemInfoPanel::ProcessGui() {
 
 					ImGui::Text("Processors:");
 					ImGui::SameLine(indent + gap);
-					ImGui::Text("%u", sysInfo.dwNumberOfProcessors);
+					ImGui::Text("%lu", sysInfo.dwNumberOfProcessors);
 
 					ImGui::Text("Temperature:");
 					ImGui::SameLine(indent + gap);
-					ImGui::Text(u8"%d °C", (int)(valueThermalZone - 273));
+					ImGui::Text("%d °C", (int)(valueThermalZone - 273));
 				}
 
 				ImGui::Dummy(ImVec2(0, 2));
@@ -518,11 +518,11 @@ void SystemInfoPanel::ProcessGui() {
 							const float pre = indent + gap;
 							ImGui::Text("Speed:");
 							ImGui::SameLine(pre);
-							ImGui::Text("%u", (uint64_t)(proc.maxFreq * proc.rateFreq));
+							ImGui::Text("%" PRIu64, (uint64_t)(proc.maxFreq * proc.rateFreq));
 							ImGui::SameLine(pre + 50);
 							ImGui::Text("/");
 							ImGui::SameLine(pre + 50 + 15);
-							ImGui::Text("%u", (uint64_t)proc.maxFreq);
+							ImGui::Text("%" PRIu64, (uint64_t)proc.maxFreq);
 							ImGui::SameLine(pre + 50 * 2 + 20);
 							ImGui::Text("Mhz");
 						}
@@ -627,7 +627,7 @@ void SystemInfoPanel::ProcessGui() {
 						_Line("Name:", vc.name);
 						_Line("Compatibility:", vc.compatibility);
 						_Line("Version:", vc.driverVersion);
-						_Line("RAM:", STR_FMT("%u MB", vc.ram / (1024ui64 * 1024ui64)));
+						_Line("RAM:", STR_FMT("%u MB", vc.ram / (1024ULL * 1024ULL)));
 						
 						ImGui::Unindent(indent);
 						ImGui::TreePop();

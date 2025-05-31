@@ -95,7 +95,7 @@ value* value::reset(type_data* t, value* v) {
 	release();
 	return this->set(t, v);
 }
-value* value::reset(type_data* t, std::vector<value>& v) {
+value* value::reset(type_data* t, const std::vector<value>& v) {
 	release();
 	return this->set(t, v);
 }
@@ -132,7 +132,7 @@ value* value::set(type_data* t, value* v) {
 	new (&ptr_value) auto(v);
 	return this;
 }
-value* value::set(type_data* t, std::vector<value>& v) {
+value* value::set(type_data* t, const std::vector<value>& v) {
 	kind = type_data::tk_array;
 	type = t;
 	ref_unsync_ptr<std::vector<value>> nv(new std::vector<value>(v));
@@ -230,7 +230,7 @@ std::vector<value>::iterator value::array_get_end() const {
 }
 
 int64_t value::as_int() const {
-	if (!has_data()) return 0i64;
+	if (!has_data()) return 0LL;
 	if (kind == type_data::tk_int)
 		return int_value;
 	if (kind == type_data::tk_float) {
@@ -249,12 +249,12 @@ int64_t value::as_int() const {
 				return std::stoll(as_string());
 			}
 			catch (...) {
-				return 0i64;
+				return 0LL;
 			}
 		}
 		else return length_as_array();
 	}
-	return 0i64;
+	return 0LL;
 }
 double value::as_float() const {
 	if (!has_data()) return 0.0;

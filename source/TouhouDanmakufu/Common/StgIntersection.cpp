@@ -50,7 +50,7 @@ StgIntersectionManager::StgIntersectionManager() {
 				objIntersectionVisualizerCircle_->SetPrimitiveType(D3DPT_TRIANGLESTRIP);
 				objIntersectionVisualizerCircle_->SetShader(shaderVisualizerCircle_);
 
-				uint16_t numEdge = 48ui16;
+				uint16_t numEdge = 48;
 				objIntersectionVisualizerCircle_->SetVertexCount(numEdge + 1U);
 				{
 					std::vector<uint16_t> index;
@@ -139,8 +139,8 @@ void StgIntersectionManager::Work() {
 			if (targetA == nullptr || targetB == nullptr) continue;
 
 			if (IsIntersected(targetA, targetB)) {
-				ref_unsync_weak_ptr<StgIntersectionObject>& ptrA = targetA->GetObject();
-				ref_unsync_weak_ptr<StgIntersectionObject>& ptrB = targetB->GetObject();
+				const ref_unsync_weak_ptr<StgIntersectionObject>& ptrA = targetA->GetObject();
+				const ref_unsync_weak_ptr<StgIntersectionObject>& ptrB = targetB->GetObject();
 				{
 					if (ptrA) {
 						ptrA->Intersect(targetA, targetB);

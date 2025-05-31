@@ -329,13 +329,13 @@ DxTextScanner::DxTextScanner(wchar_t* str, size_t charCount) {
 	}
 
 	buf.push_back(L'\0');
-	this->DxTextScanner::DxTextScanner(buf);
+	*this = DxTextScanner(buf);
 }
 DxTextScanner::DxTextScanner(const std::wstring& str) {
 	std::vector<wchar_t> buf;
 	buf.resize(str.size() + 1);
 	memcpy(&buf[0], str.c_str(), (str.size() + 1) * sizeof(wchar_t));
-	this->DxTextScanner::DxTextScanner(buf);
+	*this = DxTextScanner(buf);
 }
 DxTextScanner::DxTextScanner(std::vector<wchar_t>& buf) {
 	buffer_ = buf;

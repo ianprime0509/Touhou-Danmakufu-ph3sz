@@ -182,10 +182,15 @@ namespace gstd {
 	}
 	__m128i Vectorize::Set(unsigned int a, unsigned int b, unsigned int c, unsigned int d) {
 		__m128i res;
+#ifndef __L_MATH_VECTORIZE
 		res.m128i_u32[0] = a;
 		res.m128i_u32[1] = b;
 		res.m128i_u32[2] = c;
 		res.m128i_u32[3] = d;
+#else
+		//SSE2
+		res = _mm_set_epi32(std::bit_cast<int>(d), std::bit_cast<int>(c), std::bit_cast<int>(b), std::bit_cast<int>(a));
+#endif
 		return res;
 	}
 

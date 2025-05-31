@@ -340,7 +340,7 @@ void TextureManager::ReleaseDxResource() {
 						std::wstring err = StringUtility::Format(L"TextureManager::ReleaseDxResource: "
 							"Failed to create temporary surface [%s]\r\n    %s: %s",
 							PathProperty::ReduceModuleDirectory(itrMap->first).c_str(), 
-							DXGetErrorString(hr), DXGetErrorDescription(hr));
+							DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 						Logger::WriteTop(err);
 
 						pSurfaceCopy->Release();
@@ -356,7 +356,7 @@ void TextureManager::ReleaseDxResource() {
 	else {
 		std::wstring err = StringUtility::Format(L"TextureManager::ReleaseDxResource: "
 			"D3D device abnormal. Render target surfaces cannot be saved.\r\n    %s: %s",
-			DXGetErrorString(deviceHr), DXGetErrorDescription(deviceHr));
+			DXGetErrorString9(deviceHr), DXGetErrorDescription9(deviceHr));
 		Logger::WriteTop(err);
 	}
 }
@@ -386,7 +386,7 @@ void TextureManager::RestoreDxResource() {
 						0, FALSE, &data->lpRenderZ_, nullptr);
 					if (FAILED(hr)) {
 						std::wstring err = StringUtility::Format(L"TextureManager::RestoreDxResource: (Depth)\n%s\n  %s",
-							DXGetErrorString(hr), DXGetErrorDescription(hr));
+							DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 						throw wexception(err);
 					}
 				}
@@ -395,7 +395,7 @@ void TextureManager::RestoreDxResource() {
 					data->GetImageInfo()->Format, D3DPOOL_DEFAULT, &data->pTexture_, nullptr);
 				if (FAILED(hr)) {
 					std::wstring err = StringUtility::Format(L"TextureManager::RestoreDxResource: (Texture)\n%s\n  %s",
-						DXGetErrorString(hr), DXGetErrorDescription(hr));
+						DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 					throw wexception(err);
 				}
 				data->pTexture_->GetSurfaceLevel(0, &data->lpRenderSurface_);
@@ -415,7 +415,7 @@ void TextureManager::RestoreDxResource() {
 				std::wstring err = StringUtility::Format(L"TextureManager::RestoreDxResource: "
 					"Render target restoration failed [%s]\r\n    %s: %s",
 					PathProperty::ReduceModuleDirectory(data->name_).c_str(), 
-					DXGetErrorString(hr), DXGetErrorDescription(hr));
+					DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 				Logger::WriteTop(err);
 			}
 

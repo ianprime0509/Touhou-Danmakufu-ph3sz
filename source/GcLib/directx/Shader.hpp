@@ -200,8 +200,8 @@ namespace directx {
 		ShaderIncludeCallback(const std::wstring& localDir);
 		virtual ~ShaderIncludeCallback();
 
-		HRESULT __stdcall Open(D3DXINCLUDE_TYPE type, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes);
-		HRESULT __stdcall Close(LPCVOID pData);
+		HRESULT __stdcall Open(D3DXINCLUDE_TYPE type, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes) noexcept;
+		HRESULT __stdcall Close(LPCVOID pData) noexcept;
 	};
 
 	//****************************************************************************

@@ -47,7 +47,7 @@ namespace gstd {
 		type_data* int_array_type;
 		type_data* float_array_type;
 
-		inline static type_data* deref_itr(std::set<type_data>::iterator& itr) {
+		inline static type_data* deref_itr(const std::set<type_data>::iterator& itr) {
 			return const_cast<type_data*>(&*itr);
 		}
 	};
@@ -123,7 +123,7 @@ namespace gstd {
 			env_allocator(script_machine* machine);
 			~env_allocator();
 
-			_NODISCARD value_type* allocate(size_t n);
+			[[nodiscard]] value_type* allocate(size_t n);
 			void deallocate(value_type* p, size_t n) noexcept;
 		};
 	public:
@@ -147,7 +147,7 @@ namespace gstd {
 
 		env_allocator allocator;
 	private:
-		_NODISCARD env_ptr get_new_environment();
+		[[nodiscard]] env_ptr get_new_environment();
 	public:
 		script_machine(script_engine* the_engine);
 		virtual ~script_machine();
@@ -194,7 +194,7 @@ namespace gstd {
 
 		bool has_event(const std::string& event_name, std::map<std::string, script_block*>::iterator& res);
 		int get_current_line();
-		int get_current_thread_addr() { return (int)current_thread_index._Ptr; }
+		//int get_current_thread_addr() { return (int)current_thread_index._Ptr; }
 
 		size_t get_thread_count() { return threads.size(); }
 	private:

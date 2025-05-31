@@ -9,7 +9,7 @@ namespace gstd {
 		//Change these to however you want.
 		static const std::string ARCHIVE_ENCRYPTION_KEY;
 		static void GetKeyHashHeader(const char* key, size_t keySize, byte& keyBase, byte& keyStep) {
-			uint32_t hash = std::_Hash_array_representation(key, keySize);
+			uint32_t hash = _Hash_array_representation(key, keySize);
 			keyBase = (hash & 0x000000ff) ^ 0x55;
 			keyStep = ((hash & 0x0000ff00) >> 8) ^ 0xc8;
 		}
@@ -19,7 +19,7 @@ namespace gstd {
 
 		static void GetKeyHashFile(const char* key, size_t keySize, byte headerBase, byte headerStep,
 			byte& keyBase, byte& keyStep) {
-			uint32_t hash = std::_Hash_array_representation(key, keySize);
+			uint32_t hash = _Hash_array_representation(key, keySize);
 			keyBase = ((hash & 0xff000000) >> 24) ^ 0x4a;
 			keyStep = ((hash & 0x00ff0000) >> 16) ^ 0xeb;
 		}

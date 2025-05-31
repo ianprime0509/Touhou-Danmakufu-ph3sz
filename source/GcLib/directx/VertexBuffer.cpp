@@ -6,9 +6,6 @@
 using namespace gstd;
 
 namespace directx {
-	template class BufferBase<IDirect3DVertexBuffer9>;
-	template class BufferBase<IDirect3DIndexBuffer9>;
-
 	template<typename T>
 	BufferBase<T>::BufferBase() {
 		pDevice_ = nullptr;
@@ -101,11 +98,11 @@ namespace directx {
 	//-----------------------------------------------------------------------------------------
 
 	template<typename T>
-	GrowableBuffer<T>::GrowableBuffer(IDirect3DDevice9* device) : BufferBase(device) {
+	GrowableBuffer<T>::GrowableBuffer(IDirect3DDevice9* device) : BufferBase<T>(device) {
 	}
 	template<typename T>
 	GrowableBuffer<T>::~GrowableBuffer() {
-		Release();
+		BufferBase<T>::Release();
 	}
 
 	//-----------------------------------------------------------------------------------------
@@ -225,7 +222,7 @@ namespace directx {
 		if (SUCCEEDED(hr)) return;
 		std::wstring err = StringUtility::Format(L"VertexBufferManager: "
 			"Buffer creation failure [%s]\t\r\n%s: %s",
-			bufferName.c_str(), DXGetErrorString(hr), DXGetErrorDescription(hr));
+			bufferName.c_str(), DXGetErrorString9(hr), DXGetErrorDescription9(hr));
 		throw gstd::wexception(err);
 	}
 	void VertexBufferManager::CreateBuffers(IDirect3DDevice9* device) {
@@ -266,7 +263,7 @@ namespace directx {
 
 		auto itr = mapExtraBuffer_Vertex_.find(addr);
 		if (itr != mapExtraBuffer_Vertex_.end())
-			return false;
+			return nullptr;
 
 		auto res = mapExtraBuffer_Vertex_.insert(std::make_pair(addr, std::move(pBufferOwned)));
 
@@ -308,4 +305,7 @@ namespace directx {
 			AssertBuffer(hr, StringUtility::FormatToWide("ExtraBuffer%0*x", sizeof(size_t) * 2, addr));
 		}
 	}
+
+	template class BufferBase<IDirect3DVertexBuffer9>;
+	template class BufferBase<IDirect3DIndexBuffer9>;
 }

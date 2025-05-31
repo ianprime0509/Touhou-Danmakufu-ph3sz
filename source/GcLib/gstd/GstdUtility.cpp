@@ -322,8 +322,10 @@ size_t StringUtility::ConvertWideToMulti(wchar_t* wstr, size_t wcount, std::vect
 #define CRET(x) res = x; break;
 char StringUtility::ParseEscapeSequence(const char* str, char** pEnd) {
 	char res;
-	if ((res = *(str++)) != '\\')
-		goto lab_ret;
+	if ((res = *(str++)) != '\\') {
+		if (pEnd) *pEnd = (char*)str;
+		return res;
+	}
 
 	char lead = *(str++);
 	switch (res = lead) {
@@ -346,14 +348,15 @@ char StringUtility::ParseEscapeSequence(const char* str, char** pEnd) {
 	}
 	}
 
-lab_ret:
 	if (pEnd) *pEnd = (char*)str;
 	return res;
 }
 wchar_t StringUtility::ParseEscapeSequence(const wchar_t* wstr, wchar_t** pEnd) {
 	wchar_t res;
-	if ((res = *(wstr++)) != '\\')
-		goto lab_ret;
+	if ((res = *(wstr++)) != '\\') {
+		if (pEnd) *pEnd = (wchar_t*)wstr;
+		return res;
+	}
 
 	wchar_t lead = *(wstr++);
 	switch (res = lead) {
@@ -376,7 +379,6 @@ wchar_t StringUtility::ParseEscapeSequence(const wchar_t* wstr, wchar_t** pEnd) 
 	}
 	}
 
-lab_ret:
 	if (pEnd) *pEnd = (wchar_t*)wstr;
 	return res;
 }
@@ -1000,13 +1002,13 @@ Scanner::Scanner(char* str, size_t size) {
 	buf.resize(size);
 	memcpy(&buf[0], str, size);
 	buf.push_back('\0');
-	this->Scanner::Scanner(buf);
+	*this = Scanner(buf);
 }
 Scanner::Scanner(const std::string& str) {
 	std::vector<char> buf;
 	buf.resize(str.size() + 1);
 	memcpy(&buf[0], str.c_str(), str.size() + 1);
-	this->Scanner::Scanner(buf);
+	*this = Scanner(buf);
 }
 Scanner::Scanner(const std::wstring& wstr) {
 	std::vector<char> buf;
@@ -1014,7 +1016,7 @@ Scanner::Scanner(const std::wstring& wstr) {
 	buf.resize(textSize + 4);
 	memcpy(&buf[0], &Encoding::BOM_UTF16LE[0], 2);
 	memcpy(&buf[2], wstr.c_str(), textSize + 2);
-	this->Scanner::Scanner(buf);
+	*this = Scanner(buf);
 }
 Scanner::Scanner(std::vector<char>& buf) {
 	bPermitSignNumber_ = true;
@@ -1674,7 +1676,7 @@ void Font::FCreateFontIndirect(LOGFONT& fontInfo) {
 #pragma warning (disable : 4129)	//Unrecognized escape character
 BYTE Font::DetectCharset(const wchar_t* type) {
 	std::wcmatch match;
-	bool reg = std::regex_search(type, match, std::wregex(L"[^a-zA-Z0-9_ \-]"));
+	bool reg = std::regex_search(type, match, std::wregex(L"[^a-zA-Z0-9_ \\-]"));
 	if (reg) {
 		/*
 		wchar_t ch = match[0].str()[0];

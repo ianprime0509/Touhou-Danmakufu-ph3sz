@@ -235,8 +235,8 @@ bool Shader::LoadTechnique() {
 	if (FAILED(hr)) {
 		hr = effect->ValidateTechnique(hTechnique);
 		if (FAILED(hr)) {
-			const char* err = DXGetErrorStringA(hr);
-			const char* desc = DXGetErrorDescriptionA(hr);
+			const char* err = DXGetErrorString9A(hr);
+			const char* desc = DXGetErrorDescription9A(hr);
 			std::string log = StringUtility::Format("Shader: Invalid technique [%s]\r\n\t%s",
 				err, desc);
 			Logger::WriteTop(log);
@@ -490,7 +490,7 @@ bool ShaderManager::_CreateFromFile(const std::wstring& path, shared_ptr<ShaderD
 			dest->pIncludeCallback_ = nullptr;
 
 			std::wstring err = StringUtility::Format(L"%s\r\n\t%s",
-				DXGetErrorStringW(hr), compileError.c_str());
+				DXGetErrorString9W(hr), compileError.c_str());
 			throw wexception(err);
 		}
 		else {
@@ -533,7 +533,7 @@ bool ShaderManager::_CreateFromText(const std::wstring& name, const std::string&
 			nullptr, nullptr, 0, nullptr, &dest->effect_, &pErr);
 
 		if (FAILED(hr)) {
-			char* compileError = "unknown error";
+			const char* compileError = "unknown error";
 			if (pErr) {
 				compileError = (char*)pErr->GetBufferPointer();
 			}
@@ -541,7 +541,7 @@ bool ShaderManager::_CreateFromText(const std::wstring& name, const std::string&
 			ptr_release(dest->effect_);
 
 			std::string err = StringUtility::Format("%s\r\n\t%s",
-				DXGetErrorStringA(hr), compileError);
+				DXGetErrorString9A(hr), compileError);
 			throw wexception(err);
 		}
 		else {
@@ -579,7 +579,7 @@ bool ShaderManager::_CreateCloneFromEffect(ID3DXEffect* effect, shared_ptr<Shade
 		HRESULT hr = effect->CloneEffect(graphics->GetDevice(), &dest->effect_);
 
 		if (FAILED(hr)) {
-			const char* err = DXGetErrorStringA(hr);
+			const char* err = DXGetErrorString9A(hr);
 
 			ptr_release(dest->effect_);
 
@@ -716,7 +716,7 @@ shared_ptr<Shader> ShaderManager::CreateCloneFromEffect(ID3DXEffect* effect) {
 	return res;
 }
 shared_ptr<Shader> ShaderManager::CreateFromFileInLoadThread(const std::wstring& path) {
-	return false;
+	return nullptr;
 }
 void ShaderManager::CallFromLoadThread(shared_ptr<gstd::FileManager::LoadThreadEvent> event) {
 }
@@ -733,12 +733,12 @@ ShaderIncludeCallback::~ShaderIncludeCallback() {
 }
 
 HRESULT __stdcall ShaderIncludeCallback::Open(D3DXINCLUDE_TYPE type, LPCSTR pFileName, LPCVOID pParentData,
-	LPCVOID* ppData, UINT* pBytes)
+	LPCVOID* ppData, UINT* pBytes) noexcept
 {
 	std::wstring sPath = StringUtility::ConvertMultiToWide(pFileName);
 	sPath = PathProperty::ReplaceYenToSlash(sPath);
 
-	if (!sPath._Starts_with(L"./"))
+	if (!sPath.starts_with(L"./"))
 		sPath = L"./" + sPath;
 
 	if (type == D3DXINC_LOCAL) {
@@ -771,7 +771,7 @@ HRESULT __stdcall ShaderIncludeCallback::Open(D3DXINCLUDE_TYPE type, LPCSTR pFil
 
 	return S_OK;
 }
-HRESULT __stdcall ShaderIncludeCallback::Close(LPCVOID pData) {
+HRESULT __stdcall ShaderIncludeCallback::Close(LPCVOID pData) noexcept {
 	buffer_.clear();
 	return S_OK;
 }

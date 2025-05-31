@@ -673,7 +673,7 @@ void script_machine::run_code() {
 					else {
 						stack.push_back(src_array->index_as_array(index));
 						//stack.back().make_unique();
-						i->set(i->get_type(), i->as_int() + 1i64);
+						i->set(i->get_type(), i->as_int() + 1LL);
 					}
 
 					stack.push_back(value(script_type_manager::get_boolean_type(), bStopLoop));

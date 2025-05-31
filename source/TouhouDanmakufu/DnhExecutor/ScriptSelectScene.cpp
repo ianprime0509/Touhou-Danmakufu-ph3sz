@@ -608,7 +608,7 @@ PlayTypeSelectScene::PlayTypeSelectScene(ref_count_ptr<ScriptInformation> info) 
 			ref_count_ptr<ReplayInformation> replay = replayInfoManager_->GetInformation(index);
 			int itemY = 256 + (itemCount % pageMaxY_) * 20;
 
-			std::wstring text = StringUtility::Format(L"No.%02d %-8s %012I64d %-8s (%2.2ffps) <%s>",
+			std::wstring text = StringUtility::Format(L"No.%02d %-8s %012" PRIi64 " %-8s (%2.2ffps) <%s>",
 				index,
 				replay->GetUserName().c_str(),
 				replay->GetTotalScore(),

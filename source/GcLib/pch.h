@@ -27,10 +27,6 @@
 
 //------------------------------------------------------------------------------
 
-// Minimum OS -> Windows 7
-#define WINVER _WIN32_WINNT_WIN7
-#define _WIN32_WINNT _WIN32_WINNT_WIN7
-
 // Force Unicode
 #ifdef _MBCS
 #undef _MBCS
@@ -47,6 +43,10 @@
 #endif
 
 //------------------------------Header Includes---------------------------------
+
+// Intrinsics
+#include <cpuid.h>
+#include <smmintrin.h>
 
 // Windows
 
@@ -81,7 +81,7 @@
 
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <DxErr.h>
+#include <dxerr9.h>
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
@@ -109,18 +109,8 @@
 //------------------------------------------------------------------------------
 
 #include <cstdlib>
-
-//debug
-#ifdef _DEBUG
-	#define _CRTDBG_MAP_ALLOC
-
-	#include <crtdbg.h>
-#endif
-
-#ifdef _DEBUG
-	#define __L_DBG_NEW__  ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
-	#define new __L_DBG_NEW__
-#endif
+#include <cstdint>
+#include <cinttypes>
 
 #include <cwchar>
 #include <exception>
@@ -148,6 +138,9 @@
 #include <numeric>
 #include <iterator>
 #include <future>
+#include <bit>
+#include <functional>
+#include <stdexcept>
 
 #include <fstream>
 #include <sstream>
@@ -160,7 +153,7 @@
 
 #if defined(DNH_PROJ_EXECUTOR) || defined(DNH_PROJ_FILEARCHIVER)
 	//#define ZLIB_WINAPI
-	#include <zlib/zlib.h>
+	#include <zlib.h>
 
 	#pragma comment(lib, "zlibstatic.lib")
 	//#pragma comment(lib, "zlibdynamic.lib")
@@ -202,3 +195,33 @@ namespace stdch = std::chrono;
 //------------------------------------------------------------------------------
 
 #include "Types.hpp"
+
+// Temporary replacements for MSVC functions
+
+// https://github.com/microsoft/STL/blob/1a20fe1133d711a647bbb135d98743f91b7be323/stl/inc/type_traits#L2107-L2125
+// These FNV-1a utility functions are extremely performance sensitive,
+// check examples like that in VSO-653642 before making changes.
+#if defined(_WIN64)
+constexpr size_t _FNV_offset_basis = 14695981039346656037ULL;
+constexpr size_t _FNV_prime        = 1099511628211ULL;
+#else // defined(_WIN64)
+constexpr size_t _FNV_offset_basis = 2166136261U;
+constexpr size_t _FNV_prime        = 16777619U;
+#endif // defined(_WIN64)
+
+[[nodiscard]] inline size_t _Fnv1a_append_bytes(size_t _Val, const unsigned char* const _First,
+    const size_t _Count) noexcept { // accumulate range [_First, _First + _Count) into partial FNV-1a hash _Val
+    for (size_t _Idx = 0; _Idx < _Count; ++_Idx) {
+        _Val ^= static_cast<size_t>(_First[_Idx]);
+        _Val *= _FNV_prime;
+    }
+
+    return _Val;
+}
+
+// https://github.com/microsoft/STL/blob/1a20fe1133d711a647bbb135d98743f91b7be323/stl/inc/type_traits#L2148-L2154
+template <class _Kty>
+[[nodiscard]] inline size_t _Hash_array_representation(const _Kty* const _First, const size_t _Count) noexcept { // bitwise hashes the representation of an array
+    return _Fnv1a_append_bytes(
+        _FNV_offset_basis, reinterpret_cast<const unsigned char*>(_First), _Count * sizeof(_Kty));
+}

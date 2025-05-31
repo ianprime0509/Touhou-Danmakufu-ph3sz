@@ -15,10 +15,6 @@ namespace gstd {
 	class DebugUtility {
 	public:
 		static void DumpMemoryLeaksOnExit() {
-#ifdef _DEBUG
-			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-			_CrtDumpMemoryLeaks();
-#endif
 		}
 	};
 
@@ -330,9 +326,7 @@ namespace gstd {
 		using DVec3 = DVec<3>;
 	public:
 		static void InitializeFPU() {
-			_asm { 
-				finit 
-			};
+			__asm__("finit");
 		}
 
 		static inline constexpr double DegreeToRadian(double angle) { return angle * GM_PI / 180.0; }
@@ -364,13 +358,8 @@ namespace gstd {
 			DoSinCos(angle, (double*)res.data());
 		}
 		static inline void DoSinCos(double angle, double* pRes) {
-			_asm {
-				mov esi, DWORD PTR[pRes]	//Load pRes into esi
-				fld QWORD PTR[angle]		//Load angle into the FPU stack
-				fsincos
-				fstp QWORD PTR[esi + 8]		//Pop cos
-				fstp QWORD PTR[esi]			//Pop sin
-			};
+			pRes[0] = sin(angle);
+			pRes[1] = cos(angle);
 		}
 
 		static inline void Rotate2D(DVec2& pos, double ang, double ox, double oy) {
@@ -491,8 +480,9 @@ namespace gstd {
 					return Math::Lerp::Accelerate<T, L>;
 				case Math::Lerp::DECELERATE:
 					return Math::Lerp::Decelerate<T, L>;
+				case Math::Lerp::LINEAR:
+					return Math::Lerp::Linear<T, L>;
 				}
-				return Math::Lerp::Linear<T, L>;
 			}
 			template<typename T>
 			static funcLerpDiff<T> GetFuncDifferential(Type type) {
@@ -505,8 +495,9 @@ namespace gstd {
 					return DifferentialAccelerate<T>;
 				case Math::Lerp::DECELERATE:
 					return DifferentialDecelerate<T>;
+				case Math::Lerp::LINEAR:
+					return DifferentialLinear<T>;
 				}
-				return DifferentialLinear<T>;
 			}
 		};
 	};
