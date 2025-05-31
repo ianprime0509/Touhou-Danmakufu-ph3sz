@@ -768,7 +768,7 @@ WmiQuery::Result::Result(IEnumWbemClassObject* pEnumerator) {
 					VariantInit(&variant);
 
 					hr = pObj->Next(0, &name, &variant, nullptr, nullptr);
-					if (FAILED(hr) || name == nullptr)
+					if (FAILED(hr) || hr == WBEM_S_NO_MORE_DATA)
 						break;
 
 					valuesCurrent[(wchar_t*)name] = MOVE(variant);
