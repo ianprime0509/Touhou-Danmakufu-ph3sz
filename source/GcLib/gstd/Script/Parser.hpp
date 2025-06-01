@@ -122,7 +122,6 @@ namespace gstd {
 		script_block(uint32_t level, block_kind kind);
 	};
 
-#pragma pack(push, 1)
 	struct code {
 #ifdef _DEBUG
 		command_kind command;
@@ -177,7 +176,6 @@ namespace gstd {
 		void SetOp(command_kind op) { opc_line = (opc_line & 0xffffff00) | ((uint32_t)op & 0xff); }
 #endif
 	};
-#pragma pack(pop)
 
 	class parser {
 	private:
