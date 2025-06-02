@@ -292,3 +292,6 @@ __pycache__/
 # Zig
 .zig-cache
 zig-out
+
+# Wine
+/wineprefix
