@@ -240,7 +240,6 @@ pub fn build(b: *std.Build) void {
         "-Wno-potentially-evaluated-expression",
         "-Wno-switch",
         "-Wno-switch-enum",
-        "-Wno-uninitialized",
         "-Wno-writable-strings",
     };
     // To help in debugging, applications are built using the console subsystem
