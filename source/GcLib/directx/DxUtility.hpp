@@ -108,10 +108,12 @@ namespace directx {
 	class DxMath {
 	public:
 		static inline D3DXVECTOR2 Normalize(const D3DXVECTOR2 &v) {
-			return *D3DXVec2Normalize(&D3DXVECTOR2(), &v);
+			D3DXVECTOR2 res;
+			return *D3DXVec2Normalize(&res, &v);
 		}
 		static inline D3DXVECTOR3 Normalize(const D3DXVECTOR3 &v) {
-			return *D3DXVec3Normalize(&D3DXVECTOR3(), &v);
+			D3DXVECTOR3 res;
+			return *D3DXVec3Normalize(&res, &v);
 		}
 		static inline float DotProduct(const D3DXVECTOR2 &v1, const D3DXVECTOR2 &v2) {
 			return D3DXVec2Dot(&v1, &v2);
@@ -123,13 +125,13 @@ namespace directx {
 			return D3DXVec2CCW(&v1, &v2);
 		}
 		static inline D3DXVECTOR3 CrossProduct(const D3DXVECTOR3 &v1, const D3DXVECTOR3 &v2) {
-			return *D3DXVec3Cross(&D3DXVECTOR3(), &v1, &v2);
+			D3DXVECTOR3 res;
+			return *D3DXVec3Cross(&res, &v1, &v2);
 		}
 
 		static inline D3DXVECTOR4 VectMatMulti(D3DXVECTOR4 v, D3DXMATRIX& mat) {
 			D3DXVECTOR4 res;
-			D3DXVec4Transform(&res, &v, &mat);
-			return res;
+			return *D3DXVec4Transform(&res, &v, &mat);
 		}
 		static void ConstructRotationMatrix(D3DXMATRIX* mat, const D3DXVECTOR2& angleX, 
 			const D3DXVECTOR2& angleY, const D3DXVECTOR2& angleZ);

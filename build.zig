@@ -232,7 +232,6 @@ pub fn build(b: *std.Build) void {
 
     const dnh_cflags: []const []const u8 = &.{
         "-std=c++23",
-        "-Wno-address-of-temporary",
         "-Wno-c++11-narrowing",
         "-Wno-deprecated-enum-float-conversion",
         "-Wno-deprecated-volatile",

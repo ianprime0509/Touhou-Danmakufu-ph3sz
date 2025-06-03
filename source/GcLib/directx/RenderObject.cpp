@@ -257,7 +257,8 @@ D3DXMATRIX RenderObject::CreateWorldMatrixSprite3D(const D3DXVECTOR3& position, 
 		if (bBillboard) {
 			D3DXMATRIX matRelativeE;
 			D3DXVECTOR3 pos;
-			D3DXVec3TransformCoord(&pos, &D3DXVECTOR3(0, 0, 0), matRelative);
+			D3DXVECTOR3 zero = D3DXVECTOR3(0, 0, 0);
+			D3DXVec3TransformCoord(&pos, &zero, matRelative);
 			D3DXMatrixTranslation(&matRelativeE, pos.x, pos.y, pos.z);
 			D3DXMatrixMultiply(&mat, &mat, &matRelativeE);
 		}
@@ -338,8 +339,10 @@ void RenderObject::SetCoordinate2dDeviceMatrix() {
 
 	D3DXMATRIX viewMat;
 	D3DXMATRIX persMat;
-	D3DVECTOR viewFrom = D3DXVECTOR3(0, 0, -100);
-	D3DXMatrixLookAtLH(&viewMat, (D3DXVECTOR3*)&viewFrom, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 1, 0));
+	D3DXVECTOR3 viewFrom = D3DXVECTOR3(0, 0, -100);
+	D3DXVECTOR3 zero = D3DXVECTOR3(0, 0, 0);
+	D3DXVECTOR3 yPos = D3DXVECTOR3(0, 1, 0);
+	D3DXMatrixLookAtLH(&viewMat, &viewFrom, &zero, &yPos);
 	D3DXMatrixPerspectiveFovLH(&persMat, D3DXToRadian(180),
 		(float)viewPort.Width / (float)viewPort.Height, 1, 2000);
 

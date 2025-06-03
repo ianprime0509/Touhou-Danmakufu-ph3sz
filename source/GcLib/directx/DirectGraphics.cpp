@@ -469,8 +469,10 @@ void DirectGraphics::ResetCamera() {
 		D3DXMATRIX viewMat;
 		D3DXMATRIX persMat;
 
-		D3DVECTOR viewFrom = D3DXVECTOR3(100, 300, -500);
-		D3DXMatrixLookAtLH(&viewMat, (D3DXVECTOR3*)&viewFrom, &D3DXVECTOR3(0, 0, 0), &D3DXVECTOR3(0, 1, 0));
+		D3DXVECTOR3 viewFrom = D3DXVECTOR3(100, 300, -500);
+		D3DXVECTOR3 zero = D3DXVECTOR3(0, 0, 0);
+		D3DXVECTOR3 posY = D3DXVECTOR3(0, 1, 0);
+		D3DXMatrixLookAtLH(&viewMat, &viewFrom, &zero, &posY);
 
 		D3DXMatrixPerspectiveFovLH(&persMat, D3DXToRadian(45.0),
 			GetScreenWidth() / (float)GetScreenHeight(), 10.0f, 2000.0f);

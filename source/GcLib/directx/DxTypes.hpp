@@ -380,16 +380,16 @@ namespace directx {
 		void _Compute() {
 			D3DXVECTOR3 lv[3];
 			lv[0] = vertex_[1] - vertex_[0];
-			lv[0] = *D3DXVec3Normalize(&D3DXVECTOR3(), &lv[0]);
+			D3DXVec3Normalize(&lv[0], &lv[0]);
 
 			lv[1] = vertex_[2] - vertex_[1];
-			lv[1] = *D3DXVec3Normalize(&D3DXVECTOR3(), &lv[1]);
+			D3DXVec3Normalize(&lv[1], &lv[1]);
 
 			lv[2] = vertex_[0] - vertex_[2];
-			lv[2] = *D3DXVec3Normalize(&D3DXVECTOR3(), &lv[2]);
+			D3DXVec3Normalize(&lv[2], &lv[2]);
 
-			D3DXVECTOR3 cross = *D3DXVec3Cross(&D3DXVECTOR3(), &lv[0], &lv[1]);
-			normal_ = *D3DXVec3Normalize(&D3DXVECTOR3(), &cross);
+			D3DXVec3Cross(&normal_, &lv[0], &lv[1]);
+			D3DXVec3Normalize(&normal_, &normal_);
 		}
 	public:
 		DxTriangle3D() {}
