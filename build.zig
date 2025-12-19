@@ -236,6 +236,7 @@ pub fn build(b: *std.Build) void {
         "-Wno-deprecated-enum-float-conversion",
         "-Wno-deprecated-volatile",
         "-Wno-format-security",
+        "-Wno-nontrivial-memaccess", // See https://github.com/ocornut/imgui/pull/8129
         "-Wno-parentheses",
         "-Wno-potentially-evaluated-expression",
         "-Wno-switch",

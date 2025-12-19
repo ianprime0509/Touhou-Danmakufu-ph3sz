@@ -144,6 +144,8 @@
 
 #include <fstream>
 #include <sstream>
+#include <atomic>
+#include <mutex>
 
 #include <regex>
 
