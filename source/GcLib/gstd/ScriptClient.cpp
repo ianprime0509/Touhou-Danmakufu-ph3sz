@@ -914,8 +914,8 @@ value ScriptClientBase::Func_Interpolate_Hermite(script_machine* machine, int ar
 
 	double x = argv[8].as_float();
 
-	__m128d vec_s = _mm_set_pd(sin(vsa), cos(vsa));
-	__m128d vec_e = _mm_set_pd(sin(vea), cos(vea));
+	__m128d vec_s = _mm_setr_pd(sin(vsa), cos(vsa));
+	__m128d vec_e = _mm_setr_pd(sin(vea), cos(vea));
 	vec_s = Vectorize::Mul(vec_s, Vectorize::Replicate(vsm));
 	vec_e = Vectorize::Mul(vec_e, Vectorize::Replicate(vem));
 
@@ -929,8 +929,8 @@ value ScriptClientBase::Func_Interpolate_Hermite(script_machine* machine, int ar
 	double rvs = x * x_s1_2;			//t * (1 - t)^2
 	double rve = x2 * x_s1;				//t^2 * (t - 1)
 	double res_pos[2] = {
-		sx * rps + ex * rpe + _mm_extract_epi64(vec_s, 1) * rvs + _mm_extract_epi64(vec_e, 1) * rve,
-		sy * rps + ey * rpe + _mm_extract_epi64(vec_s, 0) * rvs + _mm_extract_epi64(vec_e, 0) * rve
+		sx * rps + ex * rpe + (double)_mm_extract_epi64(vec_s, 1) * rvs + (double)_mm_extract_epi64(vec_e, 1) * rve,
+		sy * rps + ey * rpe + (double)_mm_extract_epi64(vec_s, 0) * rvs + (double)_mm_extract_epi64(vec_e, 0) * rve
 	};
 
 	return CreateFloatArrayValue(res_pos, 2U);
