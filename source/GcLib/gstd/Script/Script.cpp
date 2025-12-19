@@ -152,8 +152,8 @@ void script_machine::env_allocator::deallocate(value_type* p, size_t n) noexcept
 //****************************************************************************
 script_machine::environment::environment(script_machine* machine) : 
 	machine(machine), _index(-1),
-	parent(parent),
-	sub(sub), ip(0),
+	parent(nullptr),
+	sub(nullptr), ip(0),
 	hasResult(false), waitCount(0) {}
 
 script_machine::environment::environment(const environment& base_from, sptr<environment> parent, script_block* sub) :
@@ -284,7 +284,7 @@ script_machine::env_ptr script_machine::add_thread(script_block* sub) {
 	threads.insert(++current_thread_index, e);
 	--current_thread_index;
 
-	return MOVE(e);
+	return e;
 }
 script_machine::env_ptr script_machine::add_child_block(script_block* sub) {
 	env_ptr e = get_new_environment();

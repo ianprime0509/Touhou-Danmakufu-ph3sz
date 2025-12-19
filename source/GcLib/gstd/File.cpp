@@ -625,7 +625,7 @@ ByteBuffer* FileManager::_GetByteBuffer(ArchiveFileEntry* entry) {
 
 			// Buffer for this entry doesn't yet exist, create new one
 			if (buf == nullptr) {
-				buf = MOVE(archive->CreateEntryBuffer(entry));
+				buf = archive->CreateEntryBuffer(entry);
 			}
 
 			res = buf.get();

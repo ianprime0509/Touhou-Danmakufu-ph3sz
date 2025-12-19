@@ -1201,7 +1201,7 @@ void KeyPanel::ProcessGui() {
 										ImVec2(128, 15), "");
 									ImGui::SameLine();
 
-									ImGui::Text("%d", value);
+									ImGui::Text("%ld", value);
 								};
 
 								constexpr int INDENT = 4;

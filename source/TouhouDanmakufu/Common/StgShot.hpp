@@ -362,7 +362,7 @@ public:
 	double roundingAngle_;
 public:
 	StgShotData* _GetShotData() { return _GetShotData(idShotData_); }
-	inline StgShotData* _GetShotData(int id);
+	StgShotData* _GetShotData(int id);
 
 	static void _SetVertexPosition(VERTEX_TLX* vertex, float x, float y, float z = 1.0f, float w = 1.0f);
 	static void _SetVertexUV(VERTEX_TLX* vertex, float u, float v);

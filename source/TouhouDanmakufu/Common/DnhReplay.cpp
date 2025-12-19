@@ -237,7 +237,7 @@ unique_ptr<ScriptCommonDataArea> ReplayInformation::StageData::GetCommonData(con
 		commonData->ReadRecord(itr->second);
 	}
 
-	return MOVE(commonData);
+	return commonData;
 }
 void ReplayInformation::StageData::SetCommonData(
 	const std::string& area, ScriptCommonDataArea* commonData)

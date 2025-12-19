@@ -232,15 +232,29 @@ pub fn build(b: *std.Build) void {
 
     const dnh_cflags: []const []const u8 = &.{
         "-std=c++23",
+        "-fno-sanitize=alignment", // Errors on invalid alignment due to packed ReplayData structure, but changing this would break replay data
+        "-Wall",
+        "-Wextra",
+        "-Werror",
         "-Wno-c++11-narrowing",
+        "-Wno-cast-function-type",
+        "-Wno-deprecated-copy",
         "-Wno-deprecated-enum-float-conversion",
         "-Wno-deprecated-volatile",
         "-Wno-format-security",
+        "-Wno-ignored-qualifiers",
         "-Wno-nontrivial-memaccess", // See https://github.com/ocornut/imgui/pull/8129
+        "-Wno-overloaded-virtual",
         "-Wno-parentheses",
         "-Wno-potentially-evaluated-expression",
+        "-Wno-redundant-move",
+        "-Wno-reorder-ctor",
+        "-Wno-sign-compare",
         "-Wno-switch",
         "-Wno-switch-enum",
+        "-Wno-unknown-pragmas",
+        "-Wno-unused",
+        "-Wno-unused-parameter",
         "-Wno-writable-strings",
     };
     // To help in debugging, applications are built using the console subsystem

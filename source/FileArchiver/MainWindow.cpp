@@ -235,8 +235,7 @@ void MainWindow::_ProcessGui() {
 					"   Toggle file/directory inclusion with the checkboxes.\n"
 					"To rescan the directory for file changes without having to browse again, use the \"Rescan\" button.\n"
 					"To clear all files, use the \"Clear\" button.\n"
-					"To start archiving the selected files, use the \"Start Archive\" button.",
-					"Help");
+					"To start archiving the selected files, use the \"Start Archive\" button.");
 			});
 			_CreatePopup(&bPopup_Version, "Version", []() {
 				ImGui::TextUnformatted(StringUtility::ConvertWideToMulti(FILEARCH_VERSION_STR).c_str());

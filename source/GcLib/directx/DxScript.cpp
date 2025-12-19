@@ -864,7 +864,7 @@ D3DXMATRIX _script_unpack_matrix(script_machine* machine, const value& v) {
 				return res;
 			}
 
-			for (size_t j = 0; j < 4; ++i)
+			for (size_t j = 0; j < 4; ++j)
 				ptrMat[i * 4 + j] = subArray[j].as_float();
 		}
 	}

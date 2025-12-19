@@ -557,7 +557,7 @@ void SoundInfoPanel::ProcessGui() {
 							ImGui::BeginTooltipEx(ImGuiTooltipFlags_OverridePreviousTooltip, ImGuiWindowFlags_None);
 
 							ImGui::Text("Format Tag: %d", item.waveFmt.wFormatTag);
-							ImGui::Text("%u Hz, %u channels", item.waveFmt.nSamplesPerSec, item.waveFmt.nChannels);
+							ImGui::Text("%lu Hz, %u channels", item.waveFmt.nSamplesPerSec, item.waveFmt.nChannels);
 
 							ImGui::EndTooltip();
 						}

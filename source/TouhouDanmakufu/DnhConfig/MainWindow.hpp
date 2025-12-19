@@ -44,6 +44,8 @@ class Panel {
 protected:
 	std::string tabName_;
 public:
+	virtual ~Panel() {}
+
 	virtual bool Initialize() = 0;
 	virtual void DefaultSettings() = 0;
 
